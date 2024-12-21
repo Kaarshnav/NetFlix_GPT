@@ -2,5 +2,5 @@
 @tailwind components;
 @tailwind utilities;
 * {
-  background-color: #212020;
+  /* background-color: #212020; */
 }
