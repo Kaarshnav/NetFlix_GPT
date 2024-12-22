@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import Header from "./Header";
+import { validatEmailPassData } from "../utils/validate";
 
 const Login = () => {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const emailRef = useRef();
+  const passRef = useRef();
+  const [loginErrorMess, setLoginErrorMess] = useState(null);
+
+  const handleSignUpClick = () => {
+    setIsSignUp(!isSignUp);
+  };
+  const handleSubmitButton = () => {
+    console.log(emailRef.current.value, passRef.current.value);
+
+    let isDataValid = validatEmailPassData(
+      emailRef.current.value,
+      passRef.current.value
+    );
+    if (isDataValid) setLoginErrorMess(isDataValid);
+  };
   return (
     <div>
       <Header />
@@ -11,19 +29,48 @@ const Login = () => {
           alt="logo"
         />
       </div>
-      <form className="w-3/12 absolute  my-36 mx-auto right-0 left-0 p-12 bg-black text-white">
-        <h1 className="font-bold text-3xl py-4"> Sign In </h1>
+      <form
+        className="w-3/12 absolute  my-36 mx-auto right-0 left-0 p-12 bg-black text-white bg-opacity-75"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <h1 className="font-bold text-3xl py-4">
+          {isSignUp ? " Sign Up" : "Sign In"}
+        </h1>
+        {isSignUp && (
+          <input
+            type="text"
+            placeholder="Name "
+            className="p-4 my-4 w-full bg-gray-700"
+          />
+        )}
         <input
+          ref={emailRef}
           type="email"
           placeholder="Email Address "
-          className="p-2 my-2 w-full"
+          className="p-4 my-4 w-full bg-gray-700"
         />
         <input
+          ref={passRef}
           type="password"
           placeholder="Password"
-          className="p-2 my-2 w-full"
+          className="p-4 my-4 w-full bg-gray-700 "
         />
-        <button className="p-4 my-2 bg-red-700 w-full">Sign In</button>
+        {loginErrorMess && (
+          <p className="text-red-700 font-bold ">{loginErrorMess}</p>
+        )}
+        <button
+          className="p-4 my-6 bg-red-700 w-full rounded-lg"
+          onClick={handleSubmitButton}
+        >
+          Sign In
+        </button>
+        <p className="my-2 p-2" onClick={handleSignUpClick}>
+          {isSignUp
+            ? " Already register? Sign In now"
+            : "New to Netflix? Sign Up now"}
+        </p>
       </form>
     </div>
   );
